@@ -31,20 +31,19 @@ namespace WAD.CW.Codebase._16486.Controllers
         {
             var receptionist = await _receptionistRepository.GetByIdAsync(id);
             if (receptionist == null)
-                return NotFound();
+                return NotFound(new { message = "Receptionist not found." });
 
             var receptionistDto = _mapper.Map<ReceptionistDto>(receptionist);
             return Ok(receptionistDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ReceptionistDto>> CreateReceptionist(CreateReceptionistDto createReceptionistDto)
+        public async Task<ActionResult> CreateReceptionist(CreateReceptionistDto createReceptionistDto)
         {
             var receptionist = _mapper.Map<Receptionist>(createReceptionistDto);
             await _receptionistRepository.AddAsync(receptionist);
 
-            var receptionistDto = _mapper.Map<ReceptionistDto>(receptionist);
-            return CreatedAtAction(nameof(GetReceptionistById), new { id = receptionistDto.Id }, receptionistDto);
+            return Ok(new { message = "Receptionist added successfully." });
         }
 
         [HttpPut("{id}")]
@@ -52,12 +51,12 @@ namespace WAD.CW.Codebase._16486.Controllers
         {
             var receptionist = await _receptionistRepository.GetByIdAsync(id);
             if (receptionist == null)
-                return NotFound();
+                return NotFound(new { message = "Receptionist not found." });
 
             _mapper.Map(updateReceptionistDto, receptionist);
             await _receptionistRepository.UpdateAsync(receptionist);
 
-            return NoContent();
+            return Ok(new { message = "Receptionist updated successfully." });
         }
 
         [HttpDelete("{id}")]
@@ -65,10 +64,10 @@ namespace WAD.CW.Codebase._16486.Controllers
         {
             var receptionist = await _receptionistRepository.GetByIdAsync(id);
             if (receptionist == null)
-                return NotFound();
+                return NotFound(new { message = "Receptionist not found." });
 
             await _receptionistRepository.DeleteAsync(id);
-            return NoContent();
+            return Ok(new { message = "Receptionist deleted successfully." });
         }
     }
 }

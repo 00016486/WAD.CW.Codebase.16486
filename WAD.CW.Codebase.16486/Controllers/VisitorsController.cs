@@ -31,20 +31,19 @@ namespace WAD.CW.Codebase._16486.Controllers
         {
             var visitor = await _visitorRepository.GetByIdAsync(id);
             if (visitor == null)
-                return NotFound();
+                return NotFound(new { message = "Visitor not found." });
 
             var visitorDto = _mapper.Map<VisitorDto>(visitor);
             return Ok(visitorDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<VisitorDto>> CreateVisitor(CreateVisitorDto createVisitorDto)
+        public async Task<ActionResult> CreateVisitor(CreateVisitorDto createVisitorDto)
         {
             var visitor = _mapper.Map<Visitor>(createVisitorDto);
             await _visitorRepository.AddAsync(visitor);
 
-            var visitorDto = _mapper.Map<VisitorDto>(visitor);
-            return CreatedAtAction(nameof(GetVisitorById), new { id = visitorDto.Id }, visitorDto);
+            return Ok(new { message = "Visitor added successfully." });
         }
 
         [HttpPut("{id}")]
@@ -52,12 +51,12 @@ namespace WAD.CW.Codebase._16486.Controllers
         {
             var visitor = await _visitorRepository.GetByIdAsync(id);
             if (visitor == null)
-                return NotFound();
+                return NotFound(new { message = "Visitor not found." });
 
             _mapper.Map(updateVisitorDto, visitor);
             await _visitorRepository.UpdateAsync(visitor);
 
-            return NoContent();
+            return Ok(new { message = "Visitor updated successfully." });
         }
 
         [HttpDelete("{id}")]
@@ -65,10 +64,10 @@ namespace WAD.CW.Codebase._16486.Controllers
         {
             var visitor = await _visitorRepository.GetByIdAsync(id);
             if (visitor == null)
-                return NotFound();
+                return NotFound(new { message = "Visitor not found." });
 
             await _visitorRepository.DeleteAsync(id);
-            return NoContent();
+            return Ok(new { message = "Visitor deleted successfully." });
         }
 
         [HttpGet("by-receptionist/{receptionistId}")]
