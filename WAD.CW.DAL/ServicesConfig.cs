@@ -14,7 +14,7 @@ namespace WAD.CW.DAL
         {
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("ReceptionSystemDatabase")));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IVisitorRepository, VisitorRepository>();
             services.AddScoped<IReceptionistRepository, ReceptionistRepository>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
